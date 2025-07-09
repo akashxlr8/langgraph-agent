@@ -8,7 +8,8 @@ from typing import Annotated
 from langchain_core.runnables import ensure_config
 from langgraph.config import get_config
 
-from react_agent import prompts
+from react_agent.prompts import SYSTEM_PROMPT
+from src.logging_config import log
 
 
 @dataclass(kw_only=True)
@@ -16,7 +17,7 @@ class Configuration:
     """The configuration for the agent."""
 
     system_prompt: str = field(
-        default=prompts.SYSTEM_PROMPT,
+        default=SYSTEM_PROMPT,
         metadata={
             "description": "The system prompt to use for the agent's interactions. "
             "This prompt sets the context and behavior for the agent."
@@ -24,7 +25,8 @@ class Configuration:
     )
 
     model: Annotated[str, {"__template_metadata__": {"kind": "llm"}}] = field(
-        default="openai/gpt-4.1",
+        # default="google_genai/gemini-2.5-flash",
+        default="openai/gpt-4.1",  # or "openai/gpt-4.1-mini" if available
         metadata={
             "description": "The name of the language model to use for the agent's main interactions. "
             "Should be in the form: provider/model-name."
@@ -43,8 +45,10 @@ class Configuration:
         """Create a Configuration instance from a RunnableConfig object."""
         try:
             config = get_config()
+            log.debug("Configuration loaded from context.")
         except RuntimeError:
             config = None
+            log.debug("No configuration found in context, using defaults.")
         config = ensure_config(config)
         configurable = config.get("configurable") or {}
         _fields = {f.name for f in fields(cls) if f.init}
