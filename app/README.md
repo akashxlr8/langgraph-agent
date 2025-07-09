@@ -1,241 +1,144 @@
-# LangGraph ReAct Agent Template
+# LangGraph ReAct Agent
 
 [![CI](https://github.com/langchain-ai/react-agent/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/langchain-ai/react-agent/actions/workflows/unit-tests.yml)
 [![Integration Tests](https://github.com/langchain-ai/react-agent/actions/workflows/integration-tests.yml/badge.svg)](https://github.com/langchain-ai/react-agent/actions/workflows/integration-tests.yml)
-[![Open in - LangGraph Studio](https://img.shields.io/badge/Open_in-LangGraph_Studio-00324d.svg?logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4NS4zMzMiIGhlaWdodD0iODUuMzMzIiB2ZXJzaW9uPSIxLjAiIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHBhdGggZD0iTTEzIDcuOGMtNi4zIDMuMS03LjEgNi4zLTYuOCAyNS43LjQgMjQuNi4zIDI0LjUgMjUuOSAyNC41QzU3LjUgNTggNTggNTcuNSA1OCAzMi4zIDU4IDcuMyA1Ni43IDYgMzIgNmMtMTIuOCAwLTE2LjEuMy0xOSAxLjhtMzcuNiAxNi42YzIuOCAyLjggMy40IDQuMiAzLjQgNy42cy0uNiA0LjgtMy40IDcuNkw0Ny4yIDQzSDE2LjhsLTMuNC0zLjRjLTQuOC00LjgtNC44LTEwLjQgMC0xNS4ybDMuNC0zLjRoMzAuNHoiLz48cGF0aCBkPSJNMTguOSAyNS42Yy0xLjEgMS4zLTEgMS43LjQgMi41LjkuNiAxLjcgMS44IDEuNyAyLjcgMCAxIC43IDIuOCAxLjYgNC4xIDEuNCAxLjkgMS40IDIuNS4zIDMuMi0xIC42LS42LjkgMS40LjkgMS41IDAgMi43LS41IDIuNy0xIDAtLjYgMS4xLS44IDIuNi0uNGwyLjYuNy0xLjgtMi45Yy01LjktOS4zLTkuNC0xMi4zLTExLjUtOS44TTM5IDI2YzAgMS4xLS45IDIuNS0yIDMuMi0yLjQgMS41LTIuNiAzLjQtLjUgNC4yLjguMyAyIDEuNyAyLjUgMy4xLjYgMS41IDEuNCAyLjMgMiAyIDEuNS0uOSAxLjItMy41LS40LTMuNS0yLjEgMC0yLjgtMi44LS44LTMuMyAxLjYtLjQgMS42LS41IDAtLjYtMS4xLS4xLTEuNS0uNi0xLjItMS42LjctMS43IDMuMy0yLjEgMy41LS41LjEuNS4yIDEuNi4zIDIuMiAwIC43LjkgMS40IDEuOSAxLjYgMi4xLjQgMi4zLTIuMy4yLTMuMi0uOC0uMy0yLTEuNy0yLjUtMy4xLTEuMS0zLTMtMy4zLTMtLjUiLz48L3N2Zz4=)](https://langgraph-studio.vercel.app/templates/open?githubUrl=https://github.com/langchain-ai/react-agent)
+[![Open in - LangGraph Studio](https://img.shields.io/badge/Open_in-LangGraph_Studio-00324d.svg?logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4NS4zMzMiIGhlaWdodD0iODUuMzMzIiB2ZXJzaW9uPSIxLjAiIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHBhdGggZD0iTTEzIDcuOGMtNi4zIDMuMS03LjEgNi4zLTYuOCAyNS43LjQgMjQuNi4zIDI0LjUgMjUuOSAyNC41QzU3LjUgNTggNTggNTcuNSA1OCAzMi4zIDU4IDcuMyA1Ni43IDYgMzIgNmMtMTIuOCAwLTE2LjEuMy0xOSAxLjhtMzcuNiAxNi42YzIuOCAyLjggMy40IDQuMiAzLjQgNy42cy0uNiA0LjgtMy40IDcuNkw0Ny4yIDQzSDE2LjhsLTMuNC0zLjRjLTQuOC00LjgtNC44LTEwLjQgMC0xNS4ybDMuNC0zLjRoMzAuNHoiLz48cGF0aCBkPSJNMTguOSAyNS42Yy0xLjEgMS4zLTEgMS43LjQgMi41LjkuNiAxLjcgMS44IDEuNyAyLjcgMCAxIC43IDIuOCAxLjYgNC4xIDEuNCAxLjkgMS40IDIuNS4zIDMuMi0xIC42LS42LjkgMS40LjkgMS41IDAgMi43LS41IDIuNy0xIDAtLjYgMS4xLS44IDIuNi0uNGwyLjYuNy0xLjgtMi45Yy01LjktOS4zLTkuNC0xMi4zLTExLjUtOS44TTM5IDI2YzAgMS4xLS45IDIuNS0yIDMuMi0yLjQgMS41LTIuNiAzLjQtLjUgNC4yLjguMyAyIDEuNyAyLjUgMy4xLjYgMS41IDEuNCAyLjMgMiAyIDEuNS0uOSAxLjItMy41LS40LTMuNS0yLjEgMC0yLjgtMi44LS44LTMuMyAxLjYtLjQgMS42LS45IDAtLjYtMS4xLS4xLTEuNS0uNi0xLjItMS41LjctMS43IDMuMy0yLjEgMy41LS41LjEuNS4yIDEuNi4zIDIuMiAwIC43LjkgMS40IDEuOSAxLjYgMi4xLjQgMi4zLTIuMy4yLTMuMi0uOC0uMy0yLTEuNy0yLjUmMy4xLTEuMS0zLTMtMy4zLTMtLjUiLz48L3N2Zz4=)](https://langgraph-studio.vercel.app/templates/open?githubUrl=https://github.com/langchain-ai/react-agent)
 
-This template showcases a [ReAct agent](https://arxiv.org/abs/2210.03629) implemented using [LangGraph](https://github.com/langchain-ai/langgraph), designed for [LangGraph Studio](https://github.com/langchain-ai/langgraph-studio). ReAct agents are uncomplicated, prototypical agents that can be flexibly extended to many tools.
+This template provides a powerful and flexible ReAct agent built with [LangGraph](https://github.com/langchain-ai/langgraph) and designed for seamless integration with [LangGraph Studio](https://github.com/langchain-ai/langgraph-studio). The ReAct (Reasoning and Acting) agent paradigm allows the agent to iteratively reason about a user's query, select appropriate tools, and execute actions to arrive at a final answer. This makes it well-suited for complex problem-solving tasks that require interaction with external tools and data sources.
 
 ![Graph view in LangGraph studio UI](./static/studio_ui.png)
 
-The core logic, defined in `src/react_agent/graph.py`, demonstrates a flexible ReAct agent that iteratively reasons about user queries and executes actions, showcasing the power of this approach for complex problem-solving tasks.
+The core logic is defined in `src/react_agent/graph.py`, which implements a ReAct agent that can be easily customized and extended.
 
-## What it does
+## Features
 
-The ReAct agent:
+- **Iterative Reasoning and Action:** The agent can reason about a problem, choose a tool, execute it, and repeat the process until it finds a solution.
+- **Tool Support:** The agent comes with a pre-built Tavily search tool and can be easily extended with custom tools.
+- **Model Flexibility:** The agent can be configured to use different language models from providers like Anthropic and OpenAI.
+- **Customizable Prompts:** The agent's behavior can be customized by modifying the system prompt.
+- **LangGraph Studio Integration:** The agent is designed to be used with LangGraph Studio, providing a visual interface for debugging and interacting with the agent.
 
-1. Takes a user **query** as input
-2. Reasons about the query and decides on an action
-3. Executes the chosen action using available tools
-4. Observes the result of the action
-5. Repeats steps 2-4 until it can provide a final answer
+## Prerequisites
 
-By default, it's set up with a basic set of tools, but can be easily extended with custom tools to suit various use cases.
+- Python 3.11+
+- A package manager (like `pip`)
 
-## Getting Started
+## Installation
 
-Assuming you have already [installed LangGraph Studio](https://github.com/langchain-ai/langgraph-studio?tab=readme-ov-file#download), to set up:
+1.  **Clone the repository:**
 
-1. Create a `.env` file.
+    ```bash
+    git clone https://github.com/langchain-ai/react-agent.git
+    cd react-agent
+    ```
 
-```bash
-cp .env.example .env
-```
+2.  **Create a virtual environment:**
 
-2. Define required API keys in your `.env` file.
+    ```bash
+    python -m venv .venv
+    source .venv/bin/activate
+    ```
 
-The primary [search tool](./src/react_agent/tools.py) [^1] used is [Tavily](https://tavily.com/). Create an API key [here](https://app.tavily.com/sign-in).
+3.  **Install the dependencies:**
 
-<!--
-Setup instruction auto-generated by `langgraph template lock`. DO NOT EDIT MANUALLY.
--->
+    ```bash
+    pip install -e ".[dev]"
+    ```
 
-### Setup Model
+## Configuration
 
-The defaults values for `model` are shown below:
+1.  **Create a `.env` file:**
 
-```yaml
-model: anthropic/claude-3-5-sonnet-20240620
-```
+    ```bash
+    cp .env.example .env
+    ```
 
-Follow the instructions below to get set up, or pick one of the additional options.
+2.  **Add your API keys to the `.env` file:**
 
-#### Anthropic
+    -   **Tavily:** The primary search tool is [Tavily](https://tavily.com/). You can get an API key [here](https://app.tavily.com/sign-in).
 
-To use Anthropic's chat models:
+        ```
+        TAVILY_API_KEY=your-tavily-api-key
+        ```
 
-1. Sign up for an [Anthropic API key](https://console.anthropic.com/) if you haven't already.
-2. Once you have your API key, add it to your `.env` file:
+    -   **Anthropic (Optional):** To use Anthropic's models, you'll need an API key from the [Anthropic Console](https://console.anthropic.com/).
 
-```
-ANTHROPIC_API_KEY=your-api-key
-```
-#### OpenAI
+        ```
+        ANTHROPIC_API_KEY=your-anthropic-api-key
+        ```
 
-To use OpenAI's chat models:
+    -   **OpenAI (Optional):** To use OpenAI's models, you'll need an API key from the [OpenAI Platform](https://platform.openai.com/signup).
 
-1. Sign up for an [OpenAI API key](https://platform.openai.com/signup).
-2. Once you have your API key, add it to your `.env` file:
-```
-OPENAI_API_KEY=your-api-key
-```
+        ```
+        OPENAI_API_KEY=your-openai-api-key
+        ```
 
+## Usage
 
+To run the agent, open the project folder in LangGraph Studio. The studio will automatically detect the agent and provide an interface for interacting with it.
 
+## Customization
 
+### Adding New Tools
 
-<!--
-End setup instructions
--->
+You can extend the agent's capabilities by adding new tools in `src/react_agent/tools.py`. A tool can be any Python function that takes a set of arguments and returns a string.
 
+### Changing the Model
 
-3. Customize whatever you'd like in the code.
-4. Open the folder LangGraph Studio!
+The agent defaults to `anthropic/claude-3-5-sonnet-20240620`. You can change the model by updating the `model` field in the agent's configuration. For example, to use OpenAI's GPT-4 Turbo, you would set the model to `openai/gpt-4-turbo`.
 
-## How to customize
+### Customizing the Prompt
 
-1. **Add new tools**: Extend the agent's capabilities by adding new tools in [tools.py](./src/react_agent/tools.py). These can be any Python functions that perform specific tasks.
-2. **Select a different model**: We default to Anthropic's Claude 3 Sonnet. You can select a compatible chat model using `provider/model-name` via configuration. Example: `openai/gpt-4-turbo-preview`.
-3. **Customize the prompt**: We provide a default system prompt in [prompts.py](./src/react_agent/prompts.py). You can easily update this via configuration in the studio.
+The agent's behavior is guided by a system prompt defined in `src/react_agent/prompts.py`. You can modify this prompt to change the agent's persona, instructions, or constraints.
 
-You can also quickly extend this template by:
+## Codebase Overview
 
-- Modifying the agent's reasoning process in [graph.py](./src/react_agent/graph.py).
-- Adjusting the ReAct loop or adding additional steps to the agent's decision-making process.
+The `src/react_agent` directory contains the core logic of the agent. Here's a breakdown of the files:
+
+-   **`graph.py`**: This is the heart of the agent. It defines the LangGraph graph that orchestrates the agent's behavior, including calling the model, executing tools, and routing the output.
+-   **`tools.py`**: This file defines the tools that the agent can use, such as a Tavily search tool, a tool to create audio narration, a viral hook generator, and a content critic.
+-   **`prompts.py`**: This file contains the default system prompts used by the agent. There are different prompts for different use cases, such as generating a script or critiquing content.
+-   **`state.py`**: This file defines the state objects for the agent, which are used to track the conversation history and other relevant information.
+-   **`configuration.py`**: This file defines the configurable parameters for the agent, such as the system prompt, the language model to use, and the maximum number of search results.
+-   **`critic_tool.py`**: This file contains a tool that uses an LLM to critique a given piece of content, such as a video script, and provide feedback.
+-   **`hook_generator.py`**: This file contains a tool that generates a viral video hook for a given script using an LLM and a set of predefined hook ideas.
+-   **`utils.py`**: This file contains utility functions, such as a function to load a chat model from a fully specified name.
 
 ## Development
 
-While iterating on your graph, you can edit past state and rerun your app from past states to debug specific nodes. Local changes will be automatically applied via hot reload. Try adding an interrupt before the agent calls tools, updating the default system message in `src/react_agent/configuration.py` to take on a persona, or adding additional nodes and edges!
+### Running Tests
 
-Follow up requests will be appended to the same thread. You can create an entirely new thread, clearing previous history, using the `+` button in the top right.
+The project includes a suite of unit and integration tests. To run the tests, use the following `make` commands:
 
-You can find the latest (under construction) docs on [LangGraph](https://github.com/langchain-ai/langgraph) here, including examples and other references. Using those guides can help you pick the right patterns to adapt here for your use case.
+-   `make test`: Run all unit tests.
+-   `make test_watch`: Run unit tests in watch mode.
+-   `make integration_tests`: Run integration tests.
 
-LangGraph Studio also integrates with [LangSmith](https://smith.langchain.com/) for more in-depth tracing and collaboration with teammates.
+### Linting and Formatting
 
-[^1]: https://python.langchain.com/docs/concepts/#tools
+The project uses `ruff` for linting and formatting. The following `make` commands are available:
 
-<!--
-Configuration auto-generated by `langgraph template lock`. DO NOT EDIT MANUALLY.
-{
-  "config_schemas": {
-    "agent": {
-      "type": "object",
-      "properties": {
-        "model": {
-          "type": "string",
-          "default": "anthropic/claude-3-5-sonnet-20240620",
-          "description": "The name of the language model to use for the agent's main interactions. Should be in the form: provider/model-name.",
-          "environment": [
-            {
-              "value": "anthropic/claude-1.2",
-              "variables": "ANTHROPIC_API_KEY"
-            },
-            {
-              "value": "anthropic/claude-2.0",
-              "variables": "ANTHROPIC_API_KEY"
-            },
-            {
-              "value": "anthropic/claude-2.1",
-              "variables": "ANTHROPIC_API_KEY"
-            },
-            {
-              "value": "anthropic/claude-3-5-sonnet-20240620",
-              "variables": "ANTHROPIC_API_KEY"
-            },
-            {
-              "value": "anthropic/claude-3-haiku-20240307",
-              "variables": "ANTHROPIC_API_KEY"
-            },
-            {
-              "value": "anthropic/claude-3-opus-20240229",
-              "variables": "ANTHROPIC_API_KEY"
-            },
-            {
-              "value": "anthropic/claude-3-sonnet-20240229",
-              "variables": "ANTHROPIC_API_KEY"
-            },
-            {
-              "value": "anthropic/claude-instant-1.2",
-              "variables": "ANTHROPIC_API_KEY"
-            },
-            {
-              "value": "openai/gpt-3.5-turbo",
-              "variables": "OPENAI_API_KEY"
-            },
-            {
-              "value": "openai/gpt-3.5-turbo-0125",
-              "variables": "OPENAI_API_KEY"
-            },
-            {
-              "value": "openai/gpt-3.5-turbo-0301",
-              "variables": "OPENAI_API_KEY"
-            },
-            {
-              "value": "openai/gpt-3.5-turbo-0613",
-              "variables": "OPENAI_API_KEY"
-            },
-            {
-              "value": "openai/gpt-3.5-turbo-1106",
-              "variables": "OPENAI_API_KEY"
-            },
-            {
-              "value": "openai/gpt-3.5-turbo-16k",
-              "variables": "OPENAI_API_KEY"
-            },
-            {
-              "value": "openai/gpt-3.5-turbo-16k-0613",
-              "variables": "OPENAI_API_KEY"
-            },
-            {
-              "value": "openai/gpt-4",
-              "variables": "OPENAI_API_KEY"
-            },
-            {
-              "value": "openai/gpt-4-0125-preview",
-              "variables": "OPENAI_API_KEY"
-            },
-            {
-              "value": "openai/gpt-4-0314",
-              "variables": "OPENAI_API_KEY"
-            },
-            {
-              "value": "openai/gpt-4-0613",
-              "variables": "OPENAI_API_KEY"
-            },
-            {
-              "value": "openai/gpt-4-1106-preview",
-              "variables": "OPENAI_API_KEY"
-            },
-            {
-              "value": "openai/gpt-4-32k",
-              "variables": "OPENAI_API_KEY"
-            },
-            {
-              "value": "openai/gpt-4-32k-0314",
-              "variables": "OPENAI_API_KEY"
-            },
-            {
-              "value": "openai/gpt-4-32k-0613",
-              "variables": "OPENAI_API_KEY"
-            },
-            {
-              "value": "openai/gpt-4-turbo",
-              "variables": "OPENAI_API_KEY"
-            },
-            {
-              "value": "openai/gpt-4-turbo-preview",
-              "variables": "OPENAI_API_KEY"
-            },
-            {
-              "value": "openai/gpt-4-vision-preview",
-              "variables": "OPENAI_API_KEY"
-            },
-            {
-              "value": "openai/gpt-4o",
-              "variables": "OPENAI_API_KEY"
-            },
-            {
-              "value": "openai/gpt-4o-mini",
-              "variables": "OPENAI_API_KEY"
-            }
-          ]
-        }
-      },
-      "environment": [
-        "TAVILY_API_KEY"
-      ]
-    }
-  }
-}
--->
+-   `make lint`: Run the linter.
+-   `make format`: Format the code.
+
+### Available Commands
+
+The `Makefile` includes the following commands:
+
+| Command             | Description                               |
+| ------------------- | ----------------------------------------- |
+| `make all`          | Display the help message.                 |
+| `make format`       | Run code formatters.                      |
+| `make lint`         | Run linters.                              |
+| `make test`         | Run unit tests.                           |
+| `make test_watch`   | Run unit tests in watch mode.             |
+| `make integration_tests` | Run integration tests.               |
+| `make help`         | Display the help message.                 |
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a pull request with any improvements or new features.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for more details.
