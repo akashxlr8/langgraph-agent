@@ -14,6 +14,8 @@ from react_agent.configuration import Configuration
 from react_agent.state import InputState, State
 from react_agent.tools import TOOLS
 from react_agent.utils import load_chat_model
+from src.logging_config import log
+
 
 # Define the function that calls the model
 
@@ -30,15 +32,18 @@ async def call_model(state: State) -> Dict[str, List[AIMessage]]:
     Returns:
         dict: A dictionary containing the model's response message.
     """
+    log.info("Calling model...")
     configuration = Configuration.from_context()
 
     # Initialize the model with tool binding. Change the model or add more tools here.
     model = load_chat_model(configuration.model).bind_tools(TOOLS)
+    log.debug(f"Model loaded: {configuration.model}")
 
     # Format the system prompt. Customize this to change the agent's behavior.
     system_message = configuration.system_prompt.format(
         system_time=datetime.now(tz=UTC).isoformat()
     )
+    log.debug(f"System message: {system_message}")
 
     # Get the model's response
     response = cast(
@@ -47,9 +52,11 @@ async def call_model(state: State) -> Dict[str, List[AIMessage]]:
             [{"role": "system", "content": system_message}, *state.messages]
         ),
     )
+    log.debug(f"Model response: {response}")
 
     # Handle the case when it's the last step and the model still wants to use a tool
     if state.is_last_step and response.tool_calls:
+        log.warning("Max steps reached, but model still wants to use a tool.")
         return {
             "messages": [
                 AIMessage(
@@ -87,6 +94,7 @@ def route_model_output(state: State) -> Literal["__end__", "tools"]:
     Returns:
         str: The name of the next node to call ("__end__" or "tools").
     """
+    log.info("Routing model output...")
     last_message = state.messages[-1]
     if not isinstance(last_message, AIMessage):
         raise ValueError(
@@ -94,8 +102,10 @@ def route_model_output(state: State) -> Literal["__end__", "tools"]:
         )
     # If there is no tool call, then we finish
     if not last_message.tool_calls:
+        log.info("No tool calls, finishing.")
         return "__end__"
     # Otherwise we execute the requested actions
+    log.info("Tool calls found, executing tools.")
     return "tools"
 
 
@@ -113,3 +123,4 @@ builder.add_edge("tools", "call_model")
 
 # Compile the builder into an executable graph
 graph = builder.compile(name="ReAct Agent")
+log.info("Graph compiled.")
