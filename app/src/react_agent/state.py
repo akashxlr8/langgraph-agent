@@ -9,6 +9,7 @@ from langchain_core.messages import AnyMessage
 from langgraph.graph import add_messages
 from langgraph.managed import IsLastStep
 from typing_extensions import Annotated
+from src.logging_config import log
 
 
 @dataclass
@@ -37,6 +38,9 @@ class InputState:
     updating by ID to maintain an "append-only" state unless a message with the same ID is provided.
     """
 
+    def __post_init__(self):
+        log.debug(f"InputState initialized with messages: {self.messages}")
+
 
 @dataclass
 class State(InputState):
@@ -52,6 +56,10 @@ class State(InputState):
     This is a 'managed' variable, controlled by the state machine rather than user code.
     It is set to 'True' when the step count reaches recursion_limit - 1.
     """
+
+    def __post_init__(self):
+        super().__post_init__()
+        log.debug(f"State initialized with is_last_step: {self.is_last_step}")
 
     # Additional attributes can be added here as needed.
     # Common examples include:
