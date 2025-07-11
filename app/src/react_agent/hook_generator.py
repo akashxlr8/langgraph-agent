@@ -97,31 +97,114 @@ async def generate_hook_with_word_count(script: str) -> str:
     “Take the first step toward [goal] today!”
     """
 
-    prompt = f"""Your task is to generate a compelling video hook for the given script. Instead of just writing a generic hook, you must use the "3-Step Hook Formula" and incorporate other key strategies for creating viral hooks.
+    prompt = f"""You are an expert hook creator that generates high-performing social media hooks using proven psychological frameworks. Create hooks using the following system:
 
-Here is the framework to follow:
+INPUT REQUIRED:
 
-**The 3-Step Hook Formula:**
+Video Topic: [What is the video about?]
+Key Visual Available: [Describe the most compelling visual you have for the first 3-5 seconds]
+Target Audience: [Who is watching?]
+Main Insight/Angle: [What's the surprising element or contrast?]
+HOOK CREATION PROCESS:
 
-1.  **Step 1: The Context Lean-in:** Start by establishing the video's topic for clarity. Then, get the viewer to "lean in" by:
-    *   Establishing common ground.
-    *   Referencing a benefit or a pain point.
-    *   Using a metaphor.
-    *   Presenting a mind-blowing fact.
+Step 1: Analyze Visual-First
+Evaluate the key visual's strength. Rate it 1-10 for:
 
-2.  **Step 2: The Scroll-Stop Interjection:** Add a single, short line that acts as a "stun gun" to stop the viewer from scrolling. Often this uses a contrasting word like "but," "however," or "yet." This builds anticipation.
+Motion/dynamism
+Uniqueness/novelty
+Clarity of subject
+Contrast potential
+Step 2: Generate All 6 Hook Formats
+Create hooks using each format below (2-4 sentences each):
 
-3.  **Step 3: The Contrarian Snapback:** Deliver a "haymaker" sentence that takes the topic in a surprising and opposite direction from the initial lean-in. This creates a strong curiosity loop.
+FORTUNE TELLER (Present → Future)
 
-**Additional Key Strategies to Incorporate:**
+Setup: Current reality
+Contrast: "This will change [industry/behavior] forever"
+Example: "This [thing] is going to completely change how [audience] does [activity]"
+EXPERIMENTER (Peer-to-Peer Demo)
 
-*   **Visual Hooks:** Suggest on-screen text (3-5 bold words) to accompany the hook.
-*   **Focus on Audience Interest:** Frame the hook around a benefit or pain point the target audience already cares about.
-*   **Cult Hopping:** If applicable, use well-known brands, celebrities, or cultural references as metaphors to make the topic more relatable.
-*   **Staccato Sentences:** Use short, punchy sentences for maximum clarity and impact.
-*   **Compress Speed to Value:** Deliver a quick "hit of value" within the hook itself.
+Setup: "I tried/tested [thing]"
+Contrast: "But discovered [unexpected result]"
+Example: "I just tested this [product] for 30 days, but it has three major flaws nobody talks about"
+TEACHER (Authority Teaching)
 
-**Here are some hook ideas to inspire you:**
+Setup: "Here's what [experts/successful people] do"
+Contrast: "That most people don't know"
+Example: "3 things you can learn from [authority] about [topic] that changed my [result]"
+MAGICIAN (Visual/Audio Stun)
+
+Use with other formats
+Start with: "Check this out" / "Look at this" / Visual snap/sound
+Include visual pacifier suggestion
+INVESTIGATOR (Secret Reveal)
+
+Setup: "There's a secret about [topic]"
+Contrast: "That nobody knows"
+Example: "This is the secret [industry] doesn't want you to know about [topic]"
+CONTRARIAN (Direct Opposition)
+
+Setup: "Everyone believes [conventional wisdom]"
+Contrast: "But they're wrong because [truth]"
+Example: "You're doing [activity] wrong. Here's what actually works..."
+Step 3: Optimize Each Hook
+For each format, ensure:
+
+SPOKEN HOOK (2-4 lines):
+
+Line 1: Context establishment (clear topic)
+Line 2: Contrast word (but/however/except)
+Line 3: Contrarian snapback (the payoff)
+Use staccato sentences (short, punchy)
+TEXT OVERLAY (3-5 words):
+
+Reinforces the visual
+Uses power words
+Large, bold, readable
+VISUAL ALIGNMENT:
+
+Spoken words describe what's shown
+Visual confirms audio message
+No comprehension gaps
+AUDIO SUGGESTION:
+
+Music/SFX that matches energy
+Builds tension at contrast point
+Step 4: Contrast Score
+Rate each hook's contrast level (1-10):
+
+How far is the distance between belief A and revelation B?
+Higher contrast = deeper curiosity loop
+Step 5: Final Recommendation
+Select the best hook based on:
+
+Visual-hook alignment score
+Contrast level
+Comprehension clarity
+Format fit for content type
+OUTPUT FORMAT:
+
+text
+[HOOK FORMAT NAME]
+
+VISUAL: [Key visual description]
+TEXT OVERLAY: "[3-5 words]"
+
+SPOKEN: "[Complete 2-4 line hook with natural delivery]"
+
+AUDIO: [Music/SFX suggestion]
+
+CONTRAST SCORE: [X/10]
+ALIGNMENT SCORE: [X/10]
+
+WHY THIS WORKS: [Brief explanation of psychological principle]
+REMEMBER:
+
+Visual → Audio → Visual (how viewers process)
+Confusion = scroll away
+First 4 seconds determine everything
+If visual is weak, suggest alternatives or recommend not making the video
+Generate all 6 formats, then recommend the top 2 based on maximum impact potential.
 
 {hook_ideas}
 
