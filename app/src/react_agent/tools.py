@@ -34,6 +34,9 @@ async def search(query: str) -> Optional[dict[str, Any]]:
     return result
 
 
+from .audio_script import generate_audio_script
+
+
 @tool
 async def create_audio_narration(script: str) -> str:
     """
@@ -42,9 +45,7 @@ async def create_audio_narration(script: str) -> str:
     """
     log.info(f"[TOOL CALL] create_audio_narration called with script: {script[:200]}")
     log.info(f"Creating audio narration for script: {script}")
-    # For now, just return the script as a placeholder.
-    # You can add real processing logic here.
-    return script
+    return await generate_audio_script(script)
 
 
 @tool
