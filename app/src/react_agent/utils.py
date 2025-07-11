@@ -5,8 +5,15 @@ from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import BaseMessage
 
 from dotenv import load_dotenv
+import os
+from langchain_anthropic import ChatAnthropic
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_openai import ChatOpenAI
+
 # Load environment variables from .env file
 load_dotenv()
+
+
 def get_message_text(msg: BaseMessage) -> str:
     """Get the text content of a message."""
     content = msg.content
