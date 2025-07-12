@@ -34,18 +34,21 @@ async def search(query: str) -> Optional[dict[str, Any]]:
     return result
 
 
-from .audio_script import generate_audio_script
+from .visuals_sfx_tool import visual_sfx_generator
 
 
 @tool
-async def create_audio_narration(script: str) -> str:
+async def create_visuals_sfx(script: str) -> str:
     """
-    Generate a clean, engaging voiceover script from a raw video script.
-    Removes non-verbal cues, on-screen text, and pauses.
+    Generate a visually engaging script for an Instagram Reel from a given script.
+    suggests visuals, on-screen text, and sound effects.
+    
+    Use when you want to create a visually engaging audio script for an Instagram Reel.
+    
     """
-    log.info(f"[TOOL CALL] create_audio_narration called with script: {script[:200]}")
-    log.info(f"Creating audio narration for script: {script}")
-    return await generate_audio_script(script)
+    log.info(f"[TOOL CALL] create_visuals_sfx called with script: {script[:200]}")
+    log.info(f"Creating visuals and SFX for script: {script}")
+    return await visual_sfx_generator(script)
 
 
 @tool
@@ -67,4 +70,4 @@ async def critic_content_tool(content: str) -> str:
     return await critic_content(content)
 
 
-TOOLS: List[Callable[..., Any]] = [search, create_audio_narration, viral_hook_generator, critic_content]
+TOOLS: List[Callable[..., Any]] = [search, create_visuals_sfx, viral_hook_generator, critic_content]
